@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 var router = express.Router();
-//router.use("/evidence", require("./routes/Evidence"));
+router.use("/product", require("./routes/Product"));
 
 app.use("/api", router);
 
