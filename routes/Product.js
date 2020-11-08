@@ -1,11 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const createProduct = require("../models/Product").createProduct;
+const { getAllProducts, getProducts, submitProduct } = require("../controllers/Database");
 router.get("/", (req, res) => {
-  var product1 = createProduct(1, "test", 2.5, "This is a test desc");
-  var product2 = createProduct(2, "test2", 5.5, "This is a test desc");
-  var products = [product1, product2];
-  return res.send(JSON.stringify(products));
+  getAllProducts(req, res);
 });
+
+router.get("/limit/:limit", (req, res) => {
+  getProducts(req, res, (Number)(req.params.limit));
+});
+
+router.post("/submit/:name/:price/:desc", (req, res) => {
+  submitProduct(req, res, req.params.name, req.params.price, req.params.desc);
+})
 
 module.exports = router;

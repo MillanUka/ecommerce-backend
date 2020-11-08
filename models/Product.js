@@ -1,8 +1,8 @@
-function createProduct(id, name, price, desc) {
+function createProduct(name, price, desc) {
     var product = {
-        id : id, 
+        _id: null, 
         name : name,
-        price : price,
+        price : Number.parseFloat(price),
         desc : desc
     }
     return product;

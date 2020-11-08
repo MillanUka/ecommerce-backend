@@ -1,11 +1,14 @@
 const path = require("path");
 const express = require("express");
 const app = express();
+const bodyParser = require("body-parser");
 
 const PORT = process.env.PORT || 5000;
 
 const buildPath = path.join(__dirname, "..", "build");
 app.use(express.static(buildPath));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 if (process.env.NODE_ENV === "production") {
   // Exprees will serve up production assets
@@ -21,6 +24,7 @@ if (process.env.NODE_ENV === "production") {
 var router = express.Router();
 router.use("/product", require("./routes/Product"));
 
+//app.use(express.bodyParser());
 app.use("/api", router);
 
 app.listen(PORT, () => {
