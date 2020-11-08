@@ -1,9 +1,10 @@
 {
   "script": {
-    "start" : "node server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "dotenv": "^8.2.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongodb": "^3.6.3"
   }
 }
