@@ -7,7 +7,7 @@ async function getProducts(req, res, query, limit) {
   MongoClient.connect(
     testDatabaseUrl,
     { useNewUrlParser: true, useUnifiedTopology: true },
-    async function (err, db) {
+    async (err, db) => {
       if (err) throw err;
       var dbo = db.db(databaseName);
       dbo
@@ -15,7 +15,7 @@ async function getProducts(req, res, query, limit) {
         .find(query)
         .sort({ name: 1 })
         .limit(limit)
-        .toArray(function (err, results) {
+        .toArray((err, results) => {
           if (err) throw err;
           if (results.length > 0) {
             res.json(results);
@@ -32,7 +32,7 @@ async function submitProduct(req, res, name, price, desc, thumbnail) {
   MongoClient.connect(
     testDatabaseUrl,
     { useNewUrlParser: true, useUnifiedTopology: true },
-    function (err, db) {
+    (err, db) => {
       if (err) throw err;
       var dbo = db.db(databaseName);
       var newProduct = createProduct(name, price, desc, thumbnail);

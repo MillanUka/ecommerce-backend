@@ -5,12 +5,19 @@ const { getProducts, submitProduct } = require("../controllers/Product");
 router.get("/", (req, res) => {
   var limit = Number(req.query.limit);
   var searchQuery = new RegExp(req.query.query, "i");
-  var query = {name: searchQuery, desc: searchQuery};
+  var query = { name: searchQuery, desc: searchQuery };
   getProducts(req, res, query, limit);
 });
 
 router.post("/submit/", (req, res) => {
-  submitProduct(req, res, req.query.name, req.query.price, req.query.desc, req.query.thumbnail);
+  submitProduct(
+    req,
+    res,
+    req.body.name,
+    req.body.price,
+    req.body.desc,
+    req.body.thumbnail
+  );
 });
 
 module.exports = router;

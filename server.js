@@ -23,7 +23,7 @@ if (process.env.NODE_ENV === "production") {
 
 var router = express.Router();
 router.use("/product", require("./routes/Product"));
-
+router.use("/user", require("./routes/User"));
 //app.use(express.bodyParser());
 app.use("/api", router);
 
