@@ -38,7 +38,7 @@ async function submitProduct(req, res, name, price, desc, thumbnail) {
       var newProduct = createProduct(name, price, desc, thumbnail);
       dbo.collection("Product").insertOne(newProduct, function (err) {
         if (err) throw err;
-        res.send({ msg: "inserted" });
+        res.send({ msg: "Product was added." });
         db.close();
       });
     }
