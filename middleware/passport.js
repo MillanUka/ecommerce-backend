@@ -1,6 +1,6 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const { checkPassword, getUserById, getUser } = require("../controllers/User");
+const { checkPassword, getUserById, getUserByEmail } = require("../controllers/User");
 
 passport.serializeUser((user, done) => {
   console.log(user)
@@ -19,11 +19,11 @@ passport.deserializeUser(async (id, done) => {
 
 passport.use(
   new LocalStrategy(
-    { usernameField: "username", passwordField: "password" },
-    async (username, password, done) => {
-      var user = await getUser(username);
+    { usernameField: "email", passwordField: "password" },
+    async (email, password, done) => {
+      var user = await getUserByEmail(email);
       if(!user) {
-        return done(null, false, { msg: "This username does not exists!" });
+        return done(null, false, { msg: "Invalid email!" });
       }
       var isPasswordValid = await checkPassword(password, user.password); 
       if (!isPasswordValid) {

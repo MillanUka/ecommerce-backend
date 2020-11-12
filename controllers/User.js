@@ -4,15 +4,16 @@ const bcrypt = require("bcrypt");
 const { testDatabaseUrl, databaseName } = require("../config");
 const { createUser } = require("../models/User");
 
-async function submitUser(req, res, username, email, password) {
+async function submitUser(req, res,email, password) {
   MongoClient.connect(
     testDatabaseUrl,
     { useNewUrlParser: true, useUnifiedTopology: true },
     (err, db) => {
       if (err) throw err;
       var dbo = db.db(databaseName);
-      var newProduct = createUser(username, email, password);
-      dbo.collection("User").insertOne(newProduct, function (err) {
+      var newUser = createUser(email, password);
+      console.log(newUser)
+      dbo.collection("User").insertOne(newUser, function (err) {
         if (err) throw err;
         res.send({ msg: "Created new User." });
         db.close();
@@ -21,9 +22,9 @@ async function submitUser(req, res, username, email, password) {
   );
 }
 
-async function getUser(username) {
-  var searchQuery = new RegExp(username, "i");
-  var query = { username: searchQuery };
+async function getUserByEmail(email) {
+  var searchQuery = new RegExp(email, "i");
+  var query = { email: searchQuery };
   return await new Promise((resolve, reject) => {
     MongoClient.connect(
       testDatabaseUrl,
@@ -90,4 +91,4 @@ async function checkPassword(password, hash) {
   });
 }
 
-module.exports = { submitUser, getUser, encryptPassword, checkPassword, getUserById };
+module.exports = { submitUser, getUserByEmail, encryptPassword, checkPassword, getUserById };

@@ -1,7 +1,6 @@
-function createUser(username, email, password) {
+function createUser(email, password) {
     var user = {
         _id : null, 
-        username : username,
         email : email,
         password : password,
         date : new Date()
