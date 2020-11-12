@@ -1,5 +1,6 @@
-var MongoClient = require("mongodb").MongoClient;
+const MongoClient = require("mongodb").MongoClient;
 
+const bcrypt = require("bcrypt");
 const { testDatabaseUrl, databaseName } = require("../config");
 const { createUser } = require("../models/User");
 
@@ -20,7 +21,9 @@ async function submitUser(req, res, username, email, password) {
   );
 }
 
-async function checkUsernameExists(username) {
+async function getUser(username) {
+  var searchQuery = new RegExp(username, "i");
+  var query = { username: searchQuery };
   return await new Promise((resolve, reject) => {
     MongoClient.connect(
       testDatabaseUrl,
@@ -31,11 +34,10 @@ async function checkUsernameExists(username) {
         dbo
           .collection("User")
           .findOne(
-            username,
-            { projection: { username: 1 } },
+            query,
             async (err, result) => {
-              if (err) throw err;
-              resolve(result === null);
+              if (err) throw reject(null);
+              resolve(result);
               db.close();
             }
           );
@@ -44,16 +46,48 @@ async function checkUsernameExists(username) {
   });
 }
 
-async function encryptPassword(password) {
-  const bcrypt = require("bcrypt");
+async function getUserById(id) {
+  var searchQuery = new RegExp(id, "i");
+  var query = { _id: searchQuery };
   return await new Promise((resolve, reject) => {
-  bcrypt.genSalt (10, (err, salt) => {
+    MongoClient.connect(
+      testDatabaseUrl,
+      { useNewUrlParser: true, useUnifiedTopology: true },
+      async (err, db) => {
+        if (err) reject(err);
+        var dbo = db.db(databaseName);
+        dbo
+          .collection("User")
+          .findOne(
+            query,
+            async (err, result) => {
+              if (err) throw reject(null);
+              resolve(result);
+              db.close();
+            }
+          );
+      }
+    );
+  });
+}
+async function encryptPassword(password) {
+  return await new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(password, salt, (err, hash) => {
-          if (err) throw reject(err);
-          resolve(hash);
-      })
-  })
-})
+        if (err) throw reject(err);
+        resolve(hash);
+      });
+    });
+  });
 }
 
-module.exports = { submitUser, checkUsernameExists, encryptPassword };
+async function checkPassword(password, hash) {
+  return await new Promise((resolve, reject) => {
+    bcrypt.compare(password, hash, function (err, result) {4
+      if(err) reject(err);
+      return resolve(result);
+    });
+  });
+}
+
+module.exports = { submitUser, getUser, encryptPassword, checkPassword, getUserById };
