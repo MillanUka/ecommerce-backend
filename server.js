@@ -25,8 +25,9 @@ if (process.env.NODE_ENV === "production") {
 var router = express.Router();
 router.use("/product", require("./routes/Product"));
 router.use("/user", require("./routes/User"));
+router.use("/auth", require("./routes/Auth"));
 //app.use(express.bodyParser());
-app.use("/api", router);
+app.use("/api/v1", router);
 
 app.use(passport.initialize());
 app.use(passport.session());
