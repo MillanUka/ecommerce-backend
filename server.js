@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const passport = require("./middleware/passport");
 
 const PORT = process.env.PORT || 5000;
 
@@ -26,6 +27,9 @@ router.use("/product", require("./routes/Product"));
 router.use("/user", require("./routes/User"));
 //app.use(express.bodyParser());
 app.use("/api", router);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.listen(PORT, () => {
   console.log(`server started on port ${PORT}`);

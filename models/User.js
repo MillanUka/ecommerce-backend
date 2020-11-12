@@ -3,7 +3,8 @@ function createUser(username, email, password) {
         _id : null, 
         username : username,
         email : email,
-        password : password
+        password : password,
+        date : new Date()
     }
     return user;
 }

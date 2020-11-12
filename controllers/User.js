@@ -35,7 +35,6 @@ async function checkUsernameExists(username) {
             { projection: { username: 1 } },
             async (err, result) => {
               if (err) throw err;
-              console.log(result);
               resolve(result === null);
               db.close();
             }
@@ -45,4 +44,16 @@ async function checkUsernameExists(username) {
   });
 }
 
-module.exports = { submitUser, checkUsernameExists };
+async function encryptPassword(password) {
+  const bcrypt = require("bcrypt");
+  return await new Promise((resolve, reject) => {
+  bcrypt.genSalt (10, (err, salt) => {
+      bcrypt.hash(password, salt, (err, hash) => {
+          if (err) throw reject(err);
+          resolve(hash);
+      })
+  })
+})
+}
+
+module.exports = { submitUser, checkUsernameExists, encryptPassword };
