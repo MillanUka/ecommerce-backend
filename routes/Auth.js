@@ -1,11 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { submitUser, getUserByEmail, encryptPassword } = require("../controllers/User");
+const {
+  submitUser,
+  getUserByEmail,
+  encryptPassword,
+  isAuthenticated,
+} = require("../controllers/User");
 const passport = require("../middleware/passport");
 router.post("/register/", async (req, res, next) => {
   var email = req.body.email;
   var password = await encryptPassword(req.body.password);
-  console.log(email)
+  console.log(email);
   var user = await getUserByEmail(email);
   var isUsernameExists = user === null;
   if (isUsernameExists) {
@@ -22,10 +27,15 @@ router.post("/login/", (req, res, next) => {
     }
     if (user) {
       user.password = null;
-      return res.status(200).json(user)
+      return res.status(200).json(user);
     } else {
       res.status(401).json(info);
     }
   })(req, res, next);
 });
+
+router.get("/check/", isAuthenticated, (req, res) => {
+  res.status(200).json({ msg: "User is authenticated" });
+});
+
 module.exports = router;

@@ -3,19 +3,18 @@ const LocalStrategy = require("passport-local").Strategy;
 const { checkPassword, getUserById, getUserByEmail } = require("../controllers/User");
 
 passport.serializeUser((user, done) => {
-  console.log(user)
   done(null, user._id);
 });
 
 passport.deserializeUser(async (id, done) => {
   var user = getUserById(id);
-  console.log(user)
   if (user === null) {
     done({});
   } else {
     done(null, user);
   }
 });
+
 
 passport.use(
   new LocalStrategy(

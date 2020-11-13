@@ -3,7 +3,7 @@ function createUser(email, password) {
         _id : null, 
         email : email,
         password : password,
-        date : new Date()
+        date : new Date(),
     }
     return user;
 }

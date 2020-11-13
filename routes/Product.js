@@ -16,7 +16,8 @@ router.post("/submit/", (req, res) => {
     req.body.name,
     req.body.price,
     req.body.desc,
-    req.body.thumbnail
+    req.body.thumbnail,
+    req.body.user
   );
 });
 

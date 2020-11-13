@@ -84,11 +84,18 @@ async function encryptPassword(password) {
 
 async function checkPassword(password, hash) {
   return await new Promise((resolve, reject) => {
-    bcrypt.compare(password, hash, function (err, result) {4
+    bcrypt.compare(password, hash, function (err, result) {
       if(err) reject(err);
       return resolve(result);
     });
   });
 }
 
-module.exports = { submitUser, getUserByEmail, encryptPassword, checkPassword, getUserById };
+async function isAuthenticated (req,res,next){
+  if(req.user)
+     return next();
+  else
+     return res.status(401).json({msg: 'User not authenticated'});
+}
+
+module.exports = { submitUser, getUserByEmail, encryptPassword, checkPassword, getUserById, isAuthenticated };
