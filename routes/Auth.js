@@ -39,6 +39,11 @@ router.post("/login/", (req, res, next) => {
   })(req, res, next);
 });
 
+app.get('/logout', function (req, res){
+  req.logOut() 
+  res.redirect('/')
+});
+
 router.get("/check/", isAuthenticated, (req, res) => {
   console.log(req.isAuthenticated());
   res.status(200).json({ msg: "User is authenticated" });
