@@ -12,7 +12,6 @@ async function submitUser(req, res,email, password) {
       if (err) throw err;
       var dbo = db.db(databaseName);
       var newUser = createUser(email, password);
-      console.log(newUser)
       dbo.collection("User").insertOne(newUser, function (err) {
         if (err) throw err;
         res.send({ msg: "Created new User." });
@@ -37,7 +36,7 @@ async function getUserByEmail(email) {
           .findOne(
             query,
             async (err, result) => {
-              if (err) throw reject(null);
+              if (err) reject(null);
               resolve(result);
               db.close();
             }
@@ -62,7 +61,7 @@ async function getUserById(id) {
           .findOne(
             query,
             async (err, result) => {
-              if (err) throw reject(null);
+              if (err) reject(null);
               resolve(result);
               db.close();
             }
@@ -75,7 +74,7 @@ async function encryptPassword(password) {
   return await new Promise((resolve, reject) => {
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(password, salt, (err, hash) => {
-        if (err) throw reject(err);
+        if (err) reject(err);
         resolve(hash);
       });
     });
@@ -91,8 +90,9 @@ async function checkPassword(password, hash) {
   });
 }
 
-async function isAuthenticated (req,res,next){
-  if(req.user)
+async function isAuthenticated (req,res,next) {
+  console.log(req.isAuthenticated())
+  if(req.isAuthenticated())
      return next();
   else
      return res.status(401).json({msg: 'User not authenticated'});
