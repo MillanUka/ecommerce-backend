@@ -7,6 +7,7 @@ const {
   isAuthenticated,
 } = require("../controllers/User");
 const passport = require("../middleware/passport");
+
 router.post("/register/", async (req, res, next) => {
   var email = req.body.email;
   var password = await encryptPassword(req.body.password);
@@ -39,14 +40,13 @@ router.post("/login/", (req, res, next) => {
   })(req, res, next);
 });
 
-app.get('/logout', function (req, res){
-  req.logOut() 
-  res.redirect('/')
+router.get('/logout', function (req, res){
+  req.logOut();
+  res.redirect('/');
 });
 
 router.get("/check/", isAuthenticated, (req, res) => {
-  console.log(req.isAuthenticated());
-  res.status(200).json({ msg: "User is authenticated" });
+  res.status(200).json({ msg: "User is authenticated", user : req.session.passport.user});
 });
 
 module.exports = router;

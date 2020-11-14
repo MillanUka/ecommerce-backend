@@ -1,10 +1,10 @@
 const MongoClient = require("mongodb").MongoClient;
-
+const ObjectId = require("mongodb").ObjectID;
 const bcrypt = require("bcrypt");
 const { testDatabaseUrl, databaseName } = require("../config");
 const { createUser } = require("../models/User");
 
-async function submitUser(req, res,email, password) {
+async function submitUser(req, res, email, password) {
   MongoClient.connect(
     testDatabaseUrl,
     { useNewUrlParser: true, useUnifiedTopology: true },
@@ -24,48 +24,37 @@ async function submitUser(req, res,email, password) {
 async function getUserByEmail(email) {
   var searchQuery = new RegExp(email, "i");
   var query = { email: searchQuery };
-  return await new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     MongoClient.connect(
       testDatabaseUrl,
       { useNewUrlParser: true, useUnifiedTopology: true },
-      async (err, db) => {
+      (err, db) => {
         if (err) reject(err);
         var dbo = db.db(databaseName);
-        dbo
-          .collection("User")
-          .findOne(
-            query,
-            async (err, result) => {
-              if (err) reject(null);
-              resolve(result);
-              db.close();
-            }
-          );
+        dbo.collection("User").findOne(query, (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+          db.close();
+        });
       }
     );
   });
 }
 
-async function getUserById(id) {
-  var searchQuery = new RegExp(id, "i");
-  var query = { _id: searchQuery };
-  return await new Promise((resolve, reject) => {
+function getUserById(id) {
+  return new Promise((resolve, reject) => {
     MongoClient.connect(
       testDatabaseUrl,
       { useNewUrlParser: true, useUnifiedTopology: true },
-      async (err, db) => {
+      (err, db) => {
         if (err) reject(err);
         var dbo = db.db(databaseName);
-        dbo
-          .collection("User")
-          .findOne(
-            query,
-            async (err, result) => {
-              if (err) reject(null);
-              resolve(result);
-              db.close();
-            }
-          );
+        dbo.collection("User").findOne({ _id: ObjectId(id) }, (err, result) => {
+          if (err) reject(err);
+          console.log(result);
+          resolve(result);
+          db.close();
+        });
       }
     );
   });
@@ -84,18 +73,23 @@ async function encryptPassword(password) {
 async function checkPassword(password, hash) {
   return await new Promise((resolve, reject) => {
     bcrypt.compare(password, hash, function (err, result) {
-      if(err) reject(err);
+      if (err) reject(err);
       return resolve(result);
     });
   });
 }
 
-async function isAuthenticated (req,res,next) {
-  console.log(req.isAuthenticated())
-  if(req.isAuthenticated())
-     return next();
-  else
-     return res.status(401).json({msg: 'User not authenticated'});
+async function isAuthenticated(req, res, next) {
+  console.log(req.isAuthenticated());
+  if (req.isAuthenticated()) return next();
+  else return res.status(401).json({ msg: "User not authenticated" });
 }
 
-module.exports = { submitUser, getUserByEmail, encryptPassword, checkPassword, getUserById, isAuthenticated };
+module.exports = {
+  submitUser,
+  getUserByEmail,
+  encryptPassword,
+  checkPassword,
+  getUserById,
+  isAuthenticated,
+};

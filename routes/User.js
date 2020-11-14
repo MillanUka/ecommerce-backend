@@ -1,10 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { isAuthenticated } = require("../controllers/User");
+const { isAuthenticated, getUserById } = require("../controllers/User");
 router.get("/", (req, res) => {});
 
-router.get("/:id", isAuthenticated, (req, res) => {
-    console.log(req.user_id);
+router.get("/:id", isAuthenticated, async (req, res) => {
+  var user = await getUserById(req.body.id);
+  console.log(user)
+  if (user) {
+    res.send(user);
+  } else {
+    res.send({ msg: "User was not found!" });
+  }
 });
 
 module.exports = router;
