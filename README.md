@@ -27,11 +27,11 @@ The server will run on localhost:5000
 Base endpoint is ```localhost:5000/api/v1```
 | Endpoint  | Method | Params | Description |
 | ------------- | ------------- | ------------- | ------------- | 
-| ```/product/```  | GET  | limit, query | Gets products in the database. Limit, limits the number of results. A search query can also be specified. If no parameters are given all products will be returned |
+| ```/product```  | GET  | limit, query | Gets products in the database. Limit, limits the number of results. A search query can also be specified. If no parameters are given all products will be returned |
 | ```/product/submit``` | POST  | name, price, desc, submitter | Adds a product to the database. Required authentication. |
 | ```/user/:id``` | GET | id | Gets a user with the id, Requires Authentication. |
 | ```/auth/register``` | POST | email, password | Registers a user. |
 | ```/auth/login``` | POST | email, password | Logins the user. |
 | ```/auth/logout``` | GET | None | Logouts the user |
-| ```/auth/check/``` | GET | None | Checks if the user is authenticated |
+| ```/auth/check``` | GET | None | Checks if the user is authenticated |
 

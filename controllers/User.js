@@ -51,7 +51,6 @@ function getUserById(id) {
         var dbo = db.db(databaseName);
         dbo.collection("User").findOne({ _id: ObjectId(id) }, (err, result) => {
           if (err) reject(err);
-          console.log(result);
           resolve(result);
           db.close();
         });
@@ -80,7 +79,6 @@ async function checkPassword(password, hash) {
 }
 
 async function isAuthenticated(req, res, next) {
-  console.log(req.isAuthenticated());
   if (req.isAuthenticated()) return next();
   else return res.status(401).json({ msg: "User not authenticated" });
 }

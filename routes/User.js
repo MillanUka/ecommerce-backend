@@ -5,7 +5,6 @@ router.get("/", (req, res) => {});
 
 router.get("/:id", isAuthenticated, async (req, res) => {
   var user = await getUserById(req.body.id);
-  console.log(user)
   if (user) {
     res.send(user);
   } else {
