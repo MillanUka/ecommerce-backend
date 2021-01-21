@@ -20,7 +20,7 @@ router.post("/submit/", (req, res) => {
     req.body.price,
     req.body.desc,
     req.body.thumbnail,
-    req.body.user
+    req.body.submitter
   );
 });
 

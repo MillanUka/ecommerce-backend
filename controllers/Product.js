@@ -28,14 +28,14 @@ async function getProducts(req, res, query, limit) {
   );
 }
 
-async function submitProduct(req, res, name, price, desc, thumbnail) {
+async function submitProduct(req, res, name, price, desc, thumbnail, submitter) {
   MongoClient.connect(
     testDatabaseUrl,
     { useNewUrlParser: true, useUnifiedTopology: true },
     (err, db) => {
       if (err) throw err;
       var dbo = db.db(databaseName);
-      var newProduct = createProduct(name, price, desc, thumbnail);
+      var newProduct = createProduct(name, price, desc, thumbnail, submitter);
       dbo.collection("Product").insertOne(newProduct, function (err) {
         if (err) throw err;
         res.send({ msg: "Product was added." });
